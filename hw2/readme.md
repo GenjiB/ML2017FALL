@@ -1,0 +1,1 @@
+genrative model & logistic regression
