@@ -1,4 +1,5 @@
-from keras.models import load_model
+from keras.models import load_model,Model
+from keras.layers import Input
 from sklearn.cluster import KMeans
 import os, sys
 import pandas as pd
@@ -10,10 +11,13 @@ def main(argv):
     test_case = argv[2]
     predict_file = argv[3]
 
-    model_path = './model/model.h5'
-    encoder = load_model(model_path)
 
     X =np.load(img_file)
+    X = X.astype('float32') / 255.
+    X = np.reshape(X, (len(X), -1))
+
+    model_path = './model/encoder.h5'
+    encoder = load_model(model_path)
     encoded_imgs = encoder.predict(X)
     encoded_imgs = encoded_imgs.reshape(encoded_imgs.shape[0], -1)
     kmeans = KMeans(n_clusters=2, random_state=0).fit(encoded_imgs)
